@@ -12,7 +12,16 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{subcaption}   % subfigure grid on the bias-correction slide
 % \usepackage[scale=2]{ccicons}   % optional (not required)
+
+% --- Bibliography for the citation footnotes on the "Prior work" slide -------
+% The markers a–d there use \parencite, which needs biblatex + a references.bib
+% holding the keys Lo2002, Mertens2002, Lopez2025, Lopez2026.
+% If you \input this deck into a thesis file that ALREADY loads biblatex,
+% delete these two lines (the master file's setup takes over).
+\usepackage[style=authoryear,backend=biber]{biblatex}
+\addbibresource{biblio.bib}
 
 % --- Academic accent: deep-blue frame titles + red alert for emphasis
 \definecolor{accentblue}{HTML}{1F4E79}
@@ -118,10 +127,10 @@
     \toprule
     Model & $V_{\widehat{SR}}$ \\
     \midrule
-    IID Normal       & $1 + \frac{1}{2}SR^2$ \\[4pt]
-    IID Non-Normal   & $1 - \gamma\,SR + \tfrac{\kappa-1}{4}SR^2$ \\[4pt]
-    AR(1)            & $\frac{1+\phi}{1-\phi} - \frac{1 + \phi +\phi^2}{1 - \phi^2}\gamma SR + \frac{1+\phi^2}{1-\phi^2} \frac{\kappa - 1}{4}SR^2$ \\[8pt]
-    GARCH(1,1)       & $1 - \frac{1-\beta}{1-\alpha-\beta}\gamma SR + \frac{\kappa-1}{4}\frac{(1-\beta)^2 (1+\alpha+\beta)}{(1-\alpha-\beta)(1-2\alpha\beta-\beta^2)}SR^2$ \\
+    IID Normal\textsuperscript{a}       & $1 + \frac{1}{2}SR^2$ \\[4pt]
+    IID Non-Normal\textsuperscript{b}   & $1 - \gamma\,SR + \tfrac{\kappa-1}{4}SR^2$ \\[4pt]
+    AR(1)\textsuperscript{c}            & $\frac{1+\phi}{1-\phi} - \frac{1 + \phi +\phi^2}{1 - \phi^2}\gamma SR + \frac{1+\phi^2}{1-\phi^2} \frac{\kappa - 1}{4}SR^2$ \\[8pt]
+    GARCH(1,1)\textsuperscript{d}       & $1 - \frac{1-\beta}{1-\alpha-\beta}\gamma SR + \frac{\kappa-1}{4}\frac{(1-\beta)^2 (1+\alpha+\beta)}{(1-\alpha-\beta)(1-2\alpha\beta-\beta^2)}SR^2$ \\
     \bottomrule
   \end{tabular}
 
@@ -132,7 +141,14 @@
 
   \vfill
   {\scriptsize $\gamma=$ skewness, \quad $\kappa=$ kurtosis.}
-\end{frame}%add the following footnotes \item[a] \parencite{Lo2002}\item[b] \parencite{Mertens2002}\item[c] \parencite{Lopez2025}\item[d] \parencite{Lopez2026}
+
+  \vspace{0.3em}
+  {\scriptsize\raggedright
+   \textsuperscript{a}\,\parencite{Lo2002}\quad
+   \textsuperscript{b}\,\parencite{Mertens2002}\quad
+   \textsuperscript{c}\,\parencite{Lopez2025}\quad
+   \textsuperscript{d}\,\parencite{Lopez2026}\par}
+\end{frame}
 
 % ---------- SLIDE 5 — Contribution ----------
 \begin{frame}{Contribution: closing the gap --- AR(1)-GARCH(1,1)}
@@ -145,17 +161,9 @@
        \;-\; b\,\gamma\,\mathrm{SR}
        \;+\; \tfrac{1}{4}c\,\mathrm{SR}^2 \]
   \end{block}
-  %b is $$
-  %S_{12} \;=\; \frac{\sigma^3\,\operatorname{skew}_r\,(1+\phi+\phi^2)}
-  %                  {(1-\phi^2)\,(1+2\phi\alpha-\phi\beta)}
-  %\left[\,2\phi\alpha
-  %  \;+\; \frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}
-  %            {1-\alpha-\beta}\,\right].\;
-  %$$
-  and c is $\frac{1}{1-\phi^2}(4\phi^2 + \kappa \frac{\Sigma}{1+X}+ \gamma^2 Z(N-\frac{M}{1+X}\Sigma))$ 
-  
-  aux vars:$M=1+\phi^2(2\alpha-\beta)$ $N=2\phi^2\alpha+\frac{1-\beta}{1-\alpha-\beta}(1-\phi^2 (\alpha+\beta))$
-  $\Sigma=\frac{2}{3}X + \frac{(1-\beta)^2}{(1-\alpha-\beta)^2}\frac{1-(\alpha+\beta)^2}{1-2\alpha \beta- \beta^2}$ $Z=\frac{2}{3}\alpha\frac{(1-\phi(\alpha+\beta))(1+\phi+\phi^2)^2}{(1+\phi)^2(1+2\phi\alpha-\phi\beta)^2}\frac{4\phi}{1-\phi^2(\alpha+\beta)}$ %write the boxed formula again with the above auxs
+
+  {\small Here $b$ and $c$ pack every serial-dependence and heteroskedasticity
+  effect into the interval width; their full expressions are on the next slide.}
 
   {\small Method of moments + delta method; all dependence packed into the
   long-run variance matrix $S$. \emph{Semi}-closed-form: odd moments of
@@ -164,6 +172,60 @@
   \vspace{0.3em}
   {\small Lo, Mertens, AR(1), GARCH(1,1) all recovered as restrictions
   ($\phi=0$ or $\alpha=\beta=0$).}
+\end{frame}
+
+% ---------- SLIDE 5b — Coefficients in full ----------
+\begin{frame}{AR(1)-GARCH(1,1): the coefficients in full}
+  \footnotesize
+  \setlength{\parskip}{0pt}%
+  \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}%
+  \setlength{\abovedisplayshortskip}{1pt}\setlength{\belowdisplayshortskip}{1pt}%
+
+  \textbf{Skewness channel} (the $b\,\gamma\,\mathrm{SR}$ term), through $S_{12}$:
+  \[
+    S_{12}=\frac{\sigma^{3}\,\gamma\,(1+\phi+\phi^{2})}
+                {(1-\phi^{2})(1+2\phi\alpha-\phi\beta)}
+           \left[\,2\phi\alpha
+             +\frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}{1-\alpha-\beta}\,\right]
+  \]
+
+  \textbf{Kurtosis coefficient:}\quad
+  $\displaystyle c=\frac{1}{1-\phi^{2}}\!\left(4\phi^{2}
+      +\kappa\,\frac{\Sigma}{1+X}
+      +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\,\Sigma\Bigr)\right)$
+
+  \vspace{0.1em}
+  \textbf{Auxiliary terms:}
+  \[
+    M = 1+\phi^{2}(2\alpha-\beta),\qquad
+    N = 2\phi^{2}\alpha+\frac{1-\beta}{1-\alpha-\beta}\bigl(1-\phi^{2}(\alpha+\beta)\bigr)
+  \]
+  \[
+    \resizebox{\textwidth}{!}{$\displaystyle
+    \Sigma = \tfrac{2}{3}X
+             +\frac{(1-\beta)^{2}}{(1-\alpha-\beta)^{2}}\,
+              \frac{1-(\alpha+\beta)^{2}}{1-2\alpha\beta-\beta^{2}},\qquad
+    Z = \tfrac{2}{3}\alpha\,
+        \frac{(1-\phi(\alpha+\beta))(1+\phi+\phi^{2})^{2}}
+             {(1+\phi)^{2}(1+2\phi\alpha-\phi\beta)^{2}}\,
+        \frac{4\phi}{1-\phi^{2}(\alpha+\beta)}$}
+  \]
+
+  \vspace{0.2em}
+  \normalsize
+  \begin{block}{Explicit asymptotic variance (auxiliary terms substituted)}
+    \[
+      \resizebox{\textwidth}{!}{$\displaystyle
+      V_{\widehat{\mathrm{SR}}}=\frac{1+\phi}{1-\phi}
+        -b\,\gamma\,\mathrm{SR}
+        +\frac{\mathrm{SR}^{2}}{4(1-\phi^{2})}
+         \left(4\phi^{2}+\kappa\frac{\Sigma}{1+X}
+               +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\Sigma\Bigr)\right)$}
+    \]
+  \end{block}
+
+  \vspace{-0.4em}
+  {\scriptsize $\gamma=$ skewness,\; $\kappa=$ kurtosis,\; $\sigma,\,X$ as defined in the text.}
 \end{frame}
 
 % ---------- SLIDE 6 — Sensitivity ----------
@@ -295,47 +357,49 @@
 % ---------- SLIDE 11 — Bias corrections work ----------
 \begin{frame}{The corrections converge faster}
   \centering
-  %prev version: \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]{figures/bias_corrections.pdf}
-  %use this figures instead:
-  % \begin{figure}[H]
-  %   \centering
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/iidnormal.png}
-  %     \caption{IID Normal}
-  %   \end{subfigure}
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/iidnonnormal.png}
-  %     \caption{IID Non-Normal}
-  %   \end{subfigure}
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/arnormal.png}
-  %     \caption{AR(1) Normal}
-  %   \end{subfigure}
-  %   \vspace{0.5cm}
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/arnonnormal.png}
-  %     \caption{AR(1) Non-Normal}
-  %   \end{subfigure}
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/garch.png}
-  %     \caption{GARCH(1,1)}
-  %   \end{subfigure}
-  %   \begin{subfigure}{0.3\textwidth}
-  %     \centering
-  %     \includegraphics[width=\linewidth]{images/bias/argarch.png}
-  %     \caption{AR(1)-GARCH(1,1)}
-  %   \end{subfigure}
-  %   \caption{Individual comparison of the improvement from the bias correction.}
-  %   \label{fig:comp_bias}
-  % \end{figure}
+  \begin{figure}
+    \centering
+    \captionsetup[subfigure]{font=scriptsize,skip=1pt}
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/iidnormal.png}
+      \caption{IID Normal}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/iidnonnormal.png}
+      \caption{IID Non-Normal}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/arnormal.png}
+      \caption{AR(1) Normal}
+    \end{subfigure}
 
-  \vspace{0.4em}
-  {\small Corrected estimator (blue) converges faster in every model.
+    \vspace{0.15em}
+
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/arnonnormal.png}
+      \caption{AR(1) Non-Normal}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/garch.png}
+      \caption{GARCH(1,1)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.31\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=1.8cm,keepaspectratio]{figures/argarch.png}
+      \caption{AR(1)-GARCH(1,1)}
+    \end{subfigure}
+    \captionsetup{font=scriptsize,skip=2pt}
+    \caption{Individual comparison of the improvement from the bias correction.}
+    \label{fig:comp_bias}
+  \end{figure}
+
+  \vspace{0.15em}
+  {\scriptsize Corrected estimator (blue) converges faster in every model.
   GARCH is slightly off at very small $T$, then overtakes --- reported honestly.}
 \end{frame}
 
@@ -346,7 +410,16 @@
 % ---------- SLIDE 12 — ETF data ----------
 \begin{frame}{Real data: three SPDR ETFs (2016--2025, weekly)}
   \centering
-  \includegraphics[width=\linewidth,height=3.2cm,keepaspectratio]{figures/prices.png}%add also figures/returns.png to the side
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}\centering
+      \includegraphics[width=\linewidth,height=3.2cm,keepaspectratio]{figures/prices.png}\\
+      {\footnotesize Price levels}
+    \end{column}
+    \begin{column}{0.5\textwidth}\centering
+      \includegraphics[width=\linewidth,height=3.2cm,keepaspectratio]{figures/returns.png}\\
+      {\footnotesize Weekly log-returns}
+    \end{column}
+  \end{columns}
 
   \vspace{0.2em}
   {\small Chosen because they show \alert{both} serial correlation in the level
