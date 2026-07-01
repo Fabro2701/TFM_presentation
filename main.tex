@@ -152,81 +152,52 @@
 
 % ---------- SLIDE 5 — Contribution ----------
 \begin{frame}{Contribution: closing the gap --- AR(1)-GARCH(1,1)}
+  \footnotesize
+  \setlength{\parskip}{0pt}%
+  \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}%
+  \setlength{\abovedisplayshortskip}{1pt}\setlength{\belowdisplayshortskip}{1pt}%
   No closed form existed when \alert{both} features are present:
   AR in the mean \textbf{and} GARCH in the variance.
 
   \vspace{0.4em}
   \begin{block}{Asymptotic variance, AR(1)-GARCH(1,1), general innovations}
-    \[ V_{\widehat{\mathrm{SR}}} = \frac{1+\phi}{1-\phi}
-       \;-\; b\,\gamma\,\mathrm{SR}
-       \;+\; \tfrac{1}{4}c\,\mathrm{SR}^2 \]
-  \end{block}
-
-  {\small Here $b$ and $c$ pack every serial-dependence and heteroskedasticity
-  effect into the interval width; their full expressions are on the next slide.}
-
-  {\small Method of moments + delta method; all dependence packed into the
-  long-run variance matrix $S$. \emph{Semi}-closed-form: odd moments of
-  $\sigma_t^2$ via Taylor expansion.}
-
-  \vspace{0.3em}
-  {\small Lo, Mertens, AR(1), GARCH(1,1) all recovered as restrictions
-  ($\phi=0$ or $\alpha=\beta=0$).}
-\end{frame}
-
-% ---------- SLIDE 5b — Coefficients in full ----------
-\begin{frame}{AR(1)-GARCH(1,1): the coefficients in full}
-  \footnotesize
-  \setlength{\parskip}{0pt}%
-  \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}%
-  \setlength{\abovedisplayshortskip}{1pt}\setlength{\belowdisplayshortskip}{1pt}%
-
-  \textbf{Skewness channel} (the $b\,\gamma\,\mathrm{SR}$ term), through $S_{12}$:
-  \[
-    S_{12}=\frac{\sigma^{3}\,\gamma\,(1+\phi+\phi^{2})}
+    \[
+      \resizebox{\textwidth}{!}{$\displaystyle
+      V_{\widehat{\mathrm{SR}}}=\frac{1+\phi}{1-\phi}
+        -\,\frac{(1+\phi+\phi^{2})}
                 {(1-\phi^{2})(1+2\phi\alpha-\phi\beta)}
            \left[\,2\phi\alpha
-             +\frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}{1-\alpha-\beta}\,\right]
-  \]
-
-  \textbf{Kurtosis coefficient:}\quad
-  $\displaystyle c=\frac{1}{1-\phi^{2}}\!\left(4\phi^{2}
-      +\kappa\,\frac{\Sigma}{1+X}
-      +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\,\Sigma\Bigr)\right)$
+             +\frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}{1-\alpha-\beta}\,\right]\,\gamma\,\mathrm{SR}
+        +\frac{\mathrm{SR}^{2}}{4(1-\phi^{2})}
+         \left(4\phi^{2}+((1+\phi^2)\kappa -1-5\phi^2)\frac{\Sigma}{1+X}
+               +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\Sigma\Bigr)\right)$}
+    \]
+  \end{block}
 
   \vspace{0.1em}
+  {\scriptsize $\gamma=$ skewness, \quad $\kappa=$ kurtosis.}
+  
+  \vfill
   \textbf{Auxiliary terms:}
   \[
     M = 1+\phi^{2}(2\alpha-\beta),\qquad
-    N = 2\phi^{2}\alpha+\frac{1-\beta}{1-\alpha-\beta}\bigl(1-\phi^{2}(\alpha+\beta)\bigr)
+    N = 2\phi^{2}\alpha+\frac{1-\beta}{1-\alpha-\beta}\bigl(1-\phi^{2}(\alpha+\beta)\bigr),\qquad
+    X = \alpha\frac{6\phi^2}{1-\phi^{2}(\alpha+\beta)}\frac{1-\alpha\beta-\beta^2}{1-2\alpha\beta-\beta^2}
   \]
   \[
-    \resizebox{\textwidth}{!}{$\displaystyle
     \Sigma = \tfrac{2}{3}X
              +\frac{(1-\beta)^{2}}{(1-\alpha-\beta)^{2}}\,
               \frac{1-(\alpha+\beta)^{2}}{1-2\alpha\beta-\beta^{2}},\qquad
     Z = \tfrac{2}{3}\alpha\,
         \frac{(1-\phi(\alpha+\beta))(1+\phi+\phi^{2})^{2}}
              {(1+\phi)^{2}(1+2\phi\alpha-\phi\beta)^{2}}\,
-        \frac{4\phi}{1-\phi^{2}(\alpha+\beta)}$}
+        \frac{4\phi}{1-\phi^{2}(\alpha+\beta)}
   \]
 
-  \vspace{0.2em}
-  \normalsize
-  \begin{block}{Explicit asymptotic variance (auxiliary terms substituted)}
-    \[
-      \resizebox{\textwidth}{!}{$\displaystyle
-      V_{\widehat{\mathrm{SR}}}=\frac{1+\phi}{1-\phi}
-        -b\,\gamma\,\mathrm{SR}
-        +\frac{\mathrm{SR}^{2}}{4(1-\phi^{2})}
-         \left(4\phi^{2}+\kappa\frac{\Sigma}{1+X}
-               +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\Sigma\Bigr)\right)$}
-    \]
-  \end{block}
-
-  \vspace{-0.4em}
-  {\scriptsize $\gamma=$ skewness,\; $\kappa=$ kurtosis,\; $\sigma,\,X$ as defined in the text.}
+  
+  
 \end{frame}
+
 
 % ---------- SLIDE 6 — Sensitivity ----------
 \begin{frame}{Which parameters move the variance?}
