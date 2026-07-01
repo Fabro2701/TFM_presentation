@@ -452,8 +452,11 @@
 
 % ---------- SLIDE 14 — Joint distribution with VaR ----------
 \begin{frame}{Beyond one metric: joint distribution with Value-at-Risk}
-  {\small Pair SR with VaR; derive the joint asymptotic distribution
-  (MM + multivariate delta method).}
+  \[ \sqrt{T}\,
+   \begin{pmatrix} \widehat{\mathrm{SR}}-\mathrm{SR} \\[3pt]
+                   \widehat{\mathrm{VaR}}-\mathrm{VaR} \end{pmatrix}
+   \;\xrightarrow{\,d\,}\;
+   \mathcal{N}\!\left(\begin{pmatrix} 0 \\[3pt] 0 \end{pmatrix},\; V_{h}\right) \]
 
   \vspace{0.3em}
   \begin{columns}[c]
@@ -473,7 +476,7 @@
     \end{column}
   \end{columns}
 
-  \vspace{0.2em}
+  \vfill
   \begin{columns}[T]
     \begin{column}{0.62\textwidth}
       \begin{itemize}\small
