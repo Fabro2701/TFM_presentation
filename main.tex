@@ -28,8 +28,8 @@
 \title{Statistical Properties of the Sharpe Ratio Estimator}
 \subtitle{A Robustness Analysis under Various Assumptions on Returns}
 \author{Fabrizio Ortega Suni}
-\institute{Master's Thesis in Banking and Quantitative Finance \\
-           Supervisor: Manuel \'Angel Dom\'inguez Toribio}
+\institute{Master’s Thesis in Banking and Quantitative Finance \\
+           Supervisor: Manuel Ángel Domínguez Toribio}
 \date{May 2026}
 % \titlegraphic{\hfill\includegraphics[height=1.2cm]{figures/logo.pdf}}
 
@@ -116,15 +116,12 @@
   \footnotesize
   \begin{tabular}{@{}ll@{}}
     \toprule
-    Model & $V_{\widehat{\mathrm{SR}}}$ \\
+    Model & $V_{\widehat{SR}}$ \\
     \midrule
-    IID Normal       & $1 + \tfrac{1}{2}\mathrm{SR}^2$ \\[4pt]
-    IID Non-Normal   & $1 - \gamma\,\mathrm{SR} + \tfrac{\kappa-1}{4}\mathrm{SR}^2$ \\[4pt]
-    AR(1)            & $\dfrac{1+\phi}{1-\phi} + \tfrac{1}{2}\dfrac{1+\phi^2}{1-\phi^2}\mathrm{SR}^2$ \\[8pt]
-    GARCH(1,1)       & $1 - \dfrac{1-\beta}{1-\alpha-\beta}\gamma\mathrm{SR}
-                        + \dfrac{\kappa-1}{4}
-                          \dfrac{(1-\beta)^2(1+\alpha+\beta)}
-                                {(1-\alpha-\beta)(1-2\alpha\beta-\beta^2)}\mathrm{SR}^2$ \\
+    IID Normal       & $1 + \frac{1}{2}SR^2$ \\[4pt]
+    IID Non-Normal   & $1 - \gamma\,SR + \tfrac{\kappa-1}{4}SR^2$ \\[4pt]
+    AR(1)            & $\frac{1+\phi}{1-\phi} - \frac{1 + \phi +\phi^2}{1 - \phi^2}\gamma SR + \frac{1+\phi^2}{1-\phi^2} \frac{\kappa - 1}{4}SR^2$ \\[8pt]
+    GARCH(1,1)       & $1 - \frac{1-\beta}{1-\alpha-\beta}\gamma SR + \frac{\kappa-1}{4}\frac{(1-\beta)^2 (1+\alpha+\beta)}{(1-\alpha-\beta)(1-2\alpha\beta-\beta^2)}SR^2$ \\
     \bottomrule
   \end{tabular}
 
@@ -135,7 +132,7 @@
 
   \vfill
   {\scriptsize $\gamma=$ skewness, \quad $\kappa=$ kurtosis.}
-\end{frame}
+\end{frame}%add the following footnotes \item[a] \parencite{Lo2002}\item[b] \parencite{Mertens2002}\item[c] \parencite{Lopez2025}\item[d] \parencite{Lopez2026}
 
 % ---------- SLIDE 5 — Contribution ----------
 \begin{frame}{Contribution: closing the gap --- AR(1)-GARCH(1,1)}
@@ -146,8 +143,19 @@
   \begin{block}{Asymptotic variance, AR(1)-GARCH(1,1), general innovations}
     \[ V_{\widehat{\mathrm{SR}}} = \frac{1+\phi}{1-\phi}
        \;-\; b\,\gamma\,\mathrm{SR}
-       \;+\; \tfrac{1}{4}\bigl(c_0 + c_\kappa\,\kappa + c_s\,\gamma^2\bigr)\,\mathrm{SR}^2 \]
+       \;+\; \tfrac{1}{4}c\,\mathrm{SR}^2 \]
   \end{block}
+  %b is $$
+  %S_{12} \;=\; \frac{\sigma^3\,\operatorname{skew}_r\,(1+\phi+\phi^2)}
+  %                  {(1-\phi^2)\,(1+2\phi\alpha-\phi\beta)}
+  %\left[\,2\phi\alpha
+  %  \;+\; \frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}
+  %            {1-\alpha-\beta}\,\right].\;
+  %$$
+  and c is $\frac{1}{1-\phi^2}(4\phi^2 + \kappa \frac{\Sigma}{1+X}+ \gamma^2 Z(N-\frac{M}{1+X}\Sigma))$ 
+  
+  aux vars:$M=1+\phi^2(2\alpha-\beta)$ $N=2\phi^2\alpha+\frac{1-\beta}{1-\alpha-\beta}(1-\phi^2 (\alpha+\beta))$
+  $\Sigma=\frac{2}{3}X + \frac{(1-\beta)^2}{(1-\alpha-\beta)^2}\frac{1-(\alpha+\beta)^2}{1-2\alpha \beta- \beta^2}$ $Z=\frac{2}{3}\alpha\frac{(1-\phi(\alpha+\beta))(1+\phi+\phi^2)^2}{(1+\phi)^2(1+2\phi\alpha-\phi\beta)^2}\frac{4\phi}{1-\phi^2(\alpha+\beta)}$ %write the boxed formula again with the above auxs
 
   {\small Method of moments + delta method; all dependence packed into the
   long-run variance matrix $S$. \emph{Semi}-closed-form: odd moments of
@@ -162,11 +170,11 @@
 \begin{frame}{Which parameters move the variance?}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.3cm,keepaspectratio]{figures/oat_sensitivity.pdf}\\
+      \includegraphics[width=\linewidth,height=4.3cm,keepaspectratio]{figures/oat_sweeps.png}\\
       {\footnotesize One-at-a-time sweep}
     \end{column}
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.3cm,keepaspectratio]{figures/mc_sensitivity.pdf}\\
+      \includegraphics[width=\linewidth,height=4.3cm,keepaspectratio]{figures/mc_scatter.png}\\
       {\footnotesize Axis-stratified Monte Carlo}
     \end{column}
   \end{columns}
@@ -205,11 +213,11 @@
 \begin{frame}{Two findings: sign asymmetry \& the AR-GARCH gap}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/coverage_ar.pdf}\\
+      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/phi_line.png}\\
       {\footnotesize AR(1) DGP: $\rho=+0.6$ vs $\rho=-0.6$}
     \end{column}
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/coverage_argarch.pdf}\\
+      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/serial_hetero_line.png}\\
       {\footnotesize AR-GARCH DGP: all candidate models}
     \end{column}
   \end{columns}
@@ -227,18 +235,18 @@
 \begin{frame}{Where the asymptotics strain}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/coverage_garch_persist.pdf}\\
+      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/a_plus_b_line.png}\\
       {\footnotesize GARCH persistence $\alpha+\beta$}
     \end{column}
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/coverage_tdf.pdf}\\
-      {\footnotesize Student-$t$ degrees of freedom $\nu$}
+      \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/slow_conv_line.png}\\
+      {\footnotesize Student-$t$ degrees of freedom $df$}
     \end{column}
   \end{columns}
   \vspace{0.3em}
   \begin{itemize}
-    \item Higher AR/GARCH persistence $\Rightarrow$ \textbf{slower} convergence to nominal.
-    \item \alert{No fourth moment} ($\nu<4$): coverage \textbf{drifts away} as $T$ grows.
+    \item Higher GARCH persistence $\Rightarrow$ \textbf{slower} convergence to nominal.
+    \item \alert{No fourth moment} ($df<4$): coverage \textbf{drifts away} as $T$ grows.
     \item Matches Kao et al.\ (2025): rate $T^{\,\varphi}$ with
           $\varphi=1-2/\kappa<\tfrac12$ --- $\sqrt{T}$ breaks down.
   \end{itemize}
@@ -287,7 +295,44 @@
 % ---------- SLIDE 11 — Bias corrections work ----------
 \begin{frame}{The corrections converge faster}
   \centering
-  \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]{figures/bias_corrections.pdf}
+  %prev version: \includegraphics[width=\linewidth,height=5.5cm,keepaspectratio]{figures/bias_corrections.pdf}
+  %use this figures instead:
+  % \begin{figure}[H]
+  %   \centering
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/iidnormal.png}
+  %     \caption{IID Normal}
+  %   \end{subfigure}
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/iidnonnormal.png}
+  %     \caption{IID Non-Normal}
+  %   \end{subfigure}
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/arnormal.png}
+  %     \caption{AR(1) Normal}
+  %   \end{subfigure}
+  %   \vspace{0.5cm}
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/arnonnormal.png}
+  %     \caption{AR(1) Non-Normal}
+  %   \end{subfigure}
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/garch.png}
+  %     \caption{GARCH(1,1)}
+  %   \end{subfigure}
+  %   \begin{subfigure}{0.3\textwidth}
+  %     \centering
+  %     \includegraphics[width=\linewidth]{images/bias/argarch.png}
+  %     \caption{AR(1)-GARCH(1,1)}
+  %   \end{subfigure}
+  %   \caption{Individual comparison of the improvement from the bias correction.}
+  %   \label{fig:comp_bias}
+  % \end{figure}
 
   \vspace{0.4em}
   {\small Corrected estimator (blue) converges faster in every model.
@@ -301,7 +346,7 @@
 % ---------- SLIDE 12 — ETF data ----------
 \begin{frame}{Real data: three SPDR ETFs (2016--2025, weekly)}
   \centering
-  \includegraphics[width=\linewidth,height=3.2cm,keepaspectratio]{figures/etf_prices_returns.pdf}
+  \includegraphics[width=\linewidth,height=3.2cm,keepaspectratio]{figures/prices.png}%add also figures/returns.png to the side
 
   \vspace{0.2em}
   {\small Chosen because they show \alert{both} serial correlation in the level
@@ -413,12 +458,12 @@
 \begin{frame}{Efficiency vs robustness, in one picture}
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.6cm,keepaspectratio]{figures/ellipse_gaussian.pdf}\\
+      \includegraphics[width=\linewidth,height=4.6cm,keepaspectratio]{figures/sr_var_gaussian.png}\\
       {\footnotesize Gaussian returns: parametric ellipse \textbf{inside}
       the non-parametric one. Coverage 95.0\% vs 95.4\%.}
     \end{column}
     \begin{column}{0.5\textwidth}\centering
-      \includegraphics[width=\linewidth,height=4.6cm,keepaspectratio]{figures/ellipse_studentt.pdf}\\
+      \includegraphics[width=\linewidth,height=4.6cm,keepaspectratio]{figures/sr_var_student_t(6).png}\\
       {\footnotesize Student-$t_6$ returns: parametric ellipse \alert{biased}
       (shift $-0.044$), coverage \alert{14.8\%}; non-parametric stays \alert{95.4\%}.}
     \end{column}
