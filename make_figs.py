@@ -1,9 +1,11 @@
 import numpy as np
+from scipy import stats
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-rng = np.random.default_rng(7)
+
+rng = np.random.default_rng(42)
 plt.rcParams.update({"font.size": 11, "axes.spines.top": False, "axes.spines.right": False,
                      "axes.titlesize": 11, "figure.dpi": 110})
 FIG = "figures/"
@@ -13,17 +15,57 @@ def save(fig, name):
     plt.close(fig)
 
 # 1. price_hook
-t = np.arange(520)
-p = 100*np.exp(np.cumsum(rng.normal(0.0009, 0.02, t.size)))
-fig, ax = plt.subplots(figsize=(5.0,3.6))
-ax.plot(t, p, lw=1.2, color="#1F4E79"); ax.set_xlabel("week"); ax.set_ylabel("price")
-save(fig, "price_hook.pdf")
+def generate_realistic_prices(T=200, seed=42):
+    rng = np.random.default_rng(seed)
+    
+    # --- DGP Parameters ---
+    # AR(1) Parameters
+    c = 0.0009    # Constant drift
+    phi = 0.05    # Slight positive autocorrelation
+    
+    # GARCH(1,1) Parameters
+    omega = 2e-6  # Long-run baseline variance multiplier
+    alpha = 0.10  # Reaction to recent shocks
+    beta = 0.85   # Persistence of volatility (alpha + beta < 1 for stationarity)
+    
+    # Student-t Parameters
+    nu = 5.0      # Degrees of freedom (lower = fatter tails, typ. 4-6 for equities)
+    
+    # ----------------------
+    
+    # Generate raw Student-t shocks
+    raw_z = stats.t.rvs(df=nu, size=T, random_state=rng)
+    # Scale shocks to ensure E[z^2] = 1, required for strict GARCH parameter interpretation
+    z = raw_z * np.sqrt((nu - 2) / nu) 
+    
+    returns = np.zeros(T)
+    sigma2 = np.zeros(T)
+    eps = np.zeros(T)
+    
+    # Initialize with unconditional variance
+    uncond_var = omega / (1 - alpha - beta)
+    sigma2[0] = uncond_var
+    eps[0] = np.sqrt(sigma2[0]) * z[0]
+    returns[0] = c + eps[0]
+    
+    # Recursive generation
+    for t in range(1, T):
+        sigma2[t] = omega + alpha * eps[t-1]**2 + beta * sigma2[t-1]
+        eps[t] = np.sqrt(sigma2[t]) * z[t]
+        returns[t] = c + phi * returns[t-1] + eps[t]
+        
+    # Integrate into price path
+    prices = 100 * np.exp(np.cumsum(returns))
+    
+    return prices, returns
 
-# 2. price_series2
-p2 = 100*np.exp(np.cumsum(rng.normal(0.0006, 0.018, t.size)))
-fig, ax = plt.subplots(figsize=(4.2,3.4))
-ax.plot(t, p2, lw=1.2, color="#1F4E79"); ax.set_xlabel("week"); ax.set_ylabel("price")
-save(fig, "price_series2.pdf")
+# --- Your Execution Block ---
+T=200
+p, rets = generate_realistic_prices(T=T)
+print(f"SR:{np.mean(rets)/np.std(rets)}")
+fig, ax = plt.subplots(figsize=(5.0,3.6))
+ax.plot(np.arange(T), p, lw=1.2, color="#1F4E79"); ax.set_xlabel("week"); ax.set_ylabel("price")
+save(fig, "price_hook.pdf")
 
 # 3. ci_illustration
 fig, ax = plt.subplots(figsize=(4.2,3.4))
