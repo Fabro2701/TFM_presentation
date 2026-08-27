@@ -99,7 +99,7 @@
 \end{frame}
 
 % ---------- SLIDE 3 — Stylized facts ----------
-\begin{frame}{Real returns are not IID Normal --- Cont's stylized facts}
+\begin{frame}{Real returns are not IID Normal, Cont's stylized facts}
   \centering
   \begin{columns}[T]
     \begin{column}{0.5\textwidth}\centering
@@ -111,7 +111,7 @@
     \begin{column}{0.5\textwidth}\centering
       {\small Skewness}\\[1pt]
       \includegraphics[height=2.5cm,keepaspectratio]{figures/skewness.pdf}\\[3pt]
-      {\small Autocorrelation (low freq.)}\\[1pt]
+      {\small Autocorrelation}\\[1pt]
       \includegraphics[height=2.5cm,keepaspectratio]{figures/autocorrelation.pdf}
     \end{column}
   \end{columns}
@@ -136,8 +136,8 @@
 
   \normalsize
   \vspace{0.7em}
-  \alert{The point estimate $\widehat{\mathrm{SR}}$ is identical in every row}
-  --- only the variance (interval width) changes.
+  \alert{The point estimate $\widehat{\mathrm{SR}}$ is identical in every row,}
+   only the variance (interval width) changes.
 
   \vfill
   {\scriptsize $\gamma=$ skewness, \quad $\kappa=$ kurtosis.}
@@ -151,7 +151,7 @@
 \end{frame}
 
 % ---------- SLIDE 5 — Contribution ----------
-\begin{frame}{Contribution: closing the gap --- AR(1)-GARCH(1,1)}
+\begin{frame}{Contribution: closing the gap AR(1)-GARCH(1,1)}
   \footnotesize
   \setlength{\parskip}{0pt}%
   \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}%
@@ -169,8 +169,8 @@
            \left[\,2\phi\alpha
              +\frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}{1-\alpha-\beta}\,\right]\,\gamma\,\mathrm{SR}
         +\frac{1}{4(1-\phi^{2})}
-         \left(4\phi^{2}+((1+\phi^2)\kappa -1-5\phi^2)\frac{\Sigma}{1+X}
-               +\gamma^{2}Z\Bigl(N-\frac{M}{1+X}\Sigma\Bigr)\right)\mathrm{SR}^{2}$}
+         \left[4\phi^{2}+((1+\phi^2)\kappa -1-5\phi^2)\frac{\Sigma}{1+X}
+               +\gamma^{2}Z\Bigl(N-\frac{\Sigma}{1+X}U\Bigr)\right]\mathrm{SR}^{2}$}
     \]
   \end{block}
 
@@ -180,7 +180,7 @@
   \vfill
   \textbf{Auxiliary terms:}
   \[
-    M = 1+\phi^{2}(2\alpha-\beta),\qquad
+    U = 1+\phi^{2}(2\alpha-\beta),\qquad
     N = 2\phi^{2}\alpha+\frac{1-\beta}{1-\alpha-\beta}\bigl(1-\phi^{2}(\alpha+\beta)\bigr),\qquad
     X = \alpha\frac{6\phi^2}{1-\phi^{2}(\alpha+\beta)}\frac{1-\alpha\beta-\beta^2}{1-2\alpha\beta-\beta^2}
   \]
@@ -214,8 +214,8 @@
   \vspace{0.4em}
   \begin{itemize}
     \item \alert{SR is the dominant driver} (convex, quadratic).
-    \item Kurtosis \& skewness next (steady, $\sim$linear).
-    \item $\phi,\alpha,\beta$: mild on average, \textbf{explosive near the boundaries}
+    \item Kurtosis, skewness (steady, $\sim$linear), and $\phi$ (asymmetric, quadratic) next.
+    \item $\alpha,\beta$: mild on average, \textbf{explosive near the boundaries}
           ($\phi\to1$, $\alpha+\beta\to1$).
   \end{itemize}
 \end{frame}
@@ -226,14 +226,14 @@
 
 % ---------- SLIDE 7 — Why coverage ----------
 \begin{frame}{Testing the intervals: coverage on synthetic data}
-  Simulate from a known DGP; measure how often the 95\% interval contains
+  Simulate Monte Carlo trajectories from a known process; measure how often the 95\% interval contains
   the true SR.
 
   \vspace{0.6em}
   Why coverage, not variance?
   \begin{itemize}
     \item It is the \textbf{inferential target} the user cares about.
-    \item It is a \textbf{joint test} --- catches bad variance, bias, \emph{and} non-normality.
+    \item It is a \textbf{joint test}, catches bad variance, bias, \emph{and} non-normality.
     \item It has a \textbf{calibrated target}: a binomial acceptance band around $0.95$.
   \end{itemize}
 
@@ -257,15 +257,15 @@
   \vspace{0.3em}
   \pause
   \begin{itemize}
-    \item Autocorrelation is \alert{asymmetric in sign}: positive $\rho \Rightarrow$
-          coverage $\approx \alert{0.69}$; negative $\rho \Rightarrow \approx \alert{0.99}$.
+    \item Autocorrelation is \alert{asymmetric in sign}: negative $\rho \Rightarrow$
+          uncoverage; positive $\rho \Rightarrow \alert{correct}$.
     \item With both stylized facts present,
           \alert{only the AR-GARCH formula closes the gap}.
   \end{itemize}
 \end{frame}
 
 % ---------- SLIDE 9 — Coverage at the edges ----------
-\begin{frame}{Where the asymptotics strain}
+\begin{frame}{Where the asymptotics fail}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}\centering
       \includegraphics[width=\linewidth,height=4.2cm,keepaspectratio]{figures/a_plus_b_line.png}\\
@@ -280,8 +280,6 @@
   \begin{itemize}
     \item Higher GARCH persistence $\Rightarrow$ \textbf{slower} convergence to nominal.
     \item \alert{No fourth moment} ($df<4$): coverage \textbf{drifts away} as $T$ grows.
-    \item Matches Kao et al.\ (2025): rate $T^{\,\varphi}$ with
-          $\varphi=1-2/\kappa<\tfrac12$ --- $\sqrt{T}$ breaks down.
   \end{itemize}
 \end{frame}
 
@@ -290,16 +288,15 @@
 %=====================================================================
 
 % ---------- SLIDE 10 — Bias & the Christie error ----------
-\begin{frame}{The point estimate is biased --- and a popular fix is wrong}
+\begin{frame}{The point estimate is biased and a popular fix is wrong}
   \setlength{\abovedisplayskip}{3pt}\setlength{\belowdisplayskip}{3pt}%
   \setlength{\abovedisplayshortskip}{1pt}\setlength{\belowdisplayshortskip}{1pt}%
   $\widehat{\mathrm{SR}}=\hat\mu/\hat\sigma$ is biased in finite samples.
-  Christie (2005) assumes $\hat\sigma$ unbiased, but by Jensen (concavity of $\sqrt{\cdot}\,$):
-  \[ \mathbb{E}[\hat\sigma]=\mathbb{E}\bigl[\sqrt{\hat\sigma^2}\bigr]
-     < \sqrt{\mathbb{E}[\hat\sigma^2]} \le \sigma \]
 
-  Christie: $\mathrm{SR}\bigl(1+\tfrac{1}{2T}\bigr)$ --- \alert{too small}.
-  Correct: $\mathrm{SR}\bigl(1+\tfrac{3}{4T}\bigr)$. General correction via the same $S$:
+  Christie (2005): $\mathrm{SR}\bigl(1+\tfrac{1}{2T}\bigr)$ \alert{too small}.
+  Correct: $\mathrm{SR}\bigl(1+\tfrac{3}{4T}\bigr)$. 
+  
+  General correction via the same $S$:
   \[ \mathbb{E}[\widehat{\mathrm{SR}}]-\mathrm{SR}
      \approx \frac{\mathrm{SR}}{2(T-1)}\Bigl(\tfrac{S_{11}}{\sigma^2}-1\Bigr)
      + \frac{1}{2T}\Bigl(-\tfrac{S_{12}}{\sigma^3} + \tfrac{3\,\mathrm{SR}}{4\sigma^4}S_{22}\Bigr) \]
@@ -315,8 +312,7 @@
     GARCH(1,1) & $\bigl(\widehat{\mathrm{SR}}+\tfrac{\gamma}{2T}\tfrac{1-\beta}{1-\alpha-\beta}\bigr)
                   \bigl(1+\tfrac{3(\kappa-1)}{8T}
                   \tfrac{(1-\beta)^2(1+\alpha+\beta)}{(1-\alpha-\beta)(1-2\alpha\beta-\beta^2)}\bigr)^{-1}$ \\[2pt]
-    AR(1)-GARCH(1,1) & $\bigl(\widehat{\mathrm{SR}}+\tfrac{1}{2T}\tfrac{S_{12}}{\sigma^3}\bigr)
-                  \bigl[1+\tfrac{1}{2(T-1)}(\tfrac{S_{11}}{\sigma^2}-1)+\tfrac{3}{8T\sigma^4}S_{22}\bigr]^{-1}$ \\
+    AR(1)-GARCH(1,1) & $\!\begin{array}[c]{@{}l@{}} \displaystyle \left(\widehat{SR}+\frac{\gamma}{2T}\,\frac{1+\phi+\phi^{2}}{(1-\phi^{2})(1+2\phi\alpha-\phi\beta)}\left[2\phi\alpha + \frac{(1-\beta)\bigl(1-\phi(\alpha+\beta)\bigr)}{1-\alpha-\beta}\right]\right) \\[2.5ex] \displaystyle \quad \times \left[1+\frac{\phi}{(T-1)(1-\phi)}+\frac{3}{8T(1-\phi^{2})}\left(4\phi^{2} + \frac{\Sigma}{1+X}\,K + \gamma^{2}Z\left(N - \frac{\Sigma}{1+X}\,U\right)\right)\right]^{-1} \end{array}$ \\
     \bottomrule
   \end{tabular}}
   \end{center}
@@ -370,8 +366,7 @@
   \end{figure}
 
   \vspace{0.15em}
-  {\scriptsize Corrected estimator (blue) converges faster in every model.
-  GARCH is slightly off at very small $T$, then overtakes --- reported honestly.}
+  {\scriptsize Corrected estimator (blue) converges faster in every model.}
 \end{frame}
 
 %=====================================================================
@@ -400,7 +395,7 @@
   \footnotesize
   \begin{tabular}{@{}lcccl@{}}
     \toprule
-    Series & Ljung--Box (level) & ARCH-LM & Normality (JB) & Selected specification \\
+    Series & Ljung--Box & ARCH-LM & Normality (JB) & Selected specification \\
     \midrule
     XLV  & reject $^{**}$  & reject $^{***}$ & reject $^{***}$ & AR(1)-GARCH(1,1)-skew-$t$ \\
     XLRE & reject $^{***}$ & reject $^{***}$ & reject $^{***}$ & AR(1)-GARCH(1,1)-skew-$t$ \\
@@ -438,11 +433,10 @@
 
   \normalsize
   \vspace{0.4em}
-  {\small XLV crosses the 95\% line; the correction is \textbf{non-monotone}
-  in model complexity.}
+
 
   \vspace{0.3em}
-  {\scriptsize Comparing PSRs across columns is not a formal model test --- each uses a
+  {\scriptsize Comparing PSRs across columns is not a formal model test, each uses a
   different reference distribution. It mirrors an analyst committing to one specification.}
 \end{frame}
 
@@ -481,8 +475,7 @@
     \begin{column}{0.62\textwidth}
       \begin{itemize}\small
         \item \alert{Negative covariance} ($\tfrac{\mu z_\alpha}{2}-\sigma<0$):
-              a shock that raises $\widehat{\mathrm{SR}}$ also lowers $\widehat{\mathrm{VaR}}$
-              --- they err together.
+              overestimation of $\widehat{SR}$ comes together with an underestimation of $\widehat{VaR}$.
         \item \alert{Only the $(2,2)$ entry differs.} Parametric is more efficient;
               the gap grows in the tail.
       \end{itemize}
@@ -498,7 +491,7 @@
       \end{tabular}
     \end{column}
   \end{columns}
-  {\scriptsize \quad $\varphi(\cdot)$ = standard normal density,\; $z_\alpha=\Phi^{-1}(\alpha)$.}
+  {\scriptsize \quad $\varphi(\cdot)$ = standard normal pdf,\; $\Phi(\cdot)$ = standard normal cdf,\; $z_\alpha=\Phi^{-1}(\alpha)$.}
 \end{frame}
 
 % ---------- SLIDE 15 — Efficiency vs robustness ----------
@@ -511,13 +504,12 @@
     \end{column}
     \begin{column}{0.5\textwidth}\centering
       \includegraphics[width=\linewidth,height=4.6cm,keepaspectratio]{figures/sr_var_student_t(6).png}\\
-      {\footnotesize Student-$t_6$ returns: parametric ellipse \alert{biased}
-      (shift $-0.044$), coverage \alert{14.8\%}; non-parametric stays \alert{95.4\%}.}
+      {\footnotesize Student-$t_6$ returns: parametric ellipse \alert{biased}, coverage \alert{14.8\%}; non-parametric stays \alert{95.4\%}.}
     \end{column}
   \end{columns}
   \vspace{0.4em}
   \begin{center}
-  Parametric wins when the distribution is right; fails badly when it is wrong.
+  Parametric wins when the assumption is right; fails badly when it is wrong.
   \end{center}
 \end{frame}
 
@@ -525,21 +517,24 @@
 \begin{frame}{How reliable is this number?}
   \begin{enumerate}
     \item \textbf{Precision} depends on the model assumed for returns.
-    \item The \textbf{wrong model} makes intervals lie --- usually too narrow.
-    \item In \textbf{small samples} the estimate is biased --- the popular fix is too small.
+    \item In \textbf{small samples} the estimate is biased.
+    \item The \textbf{wrong model} makes intervals lie, usually too narrow.
     \item Even when \textbf{correctly specified}, parameters near the \textbf{boundaries}
           ($\phi$, $\alpha+\beta$ persistence) cause trouble.
   \end{enumerate}
 
-  \vspace{0.6em}
-  \begin{center}
-  {\large A single framework --- built on the long-run variance matrix $S$ ---\\
-   answers all four for the AR-GARCH world real returns live in.}
-  \end{center}
+
 
   \vfill
-  {\footnotesize Thank you --- questions welcome.\hfill
+  {\footnotesize Thank you.\hfill
    Code: \texttt{github.com/Fabro2701/sharpe\_ratio\_TFM}}
 \end{frame}
+
+% ----------------------------
+% ---------- BACKUP ----------
+% ----------------------------
+% \begin{frame}{Backup}
+
+% \end{frame}
 
 \end{document}
