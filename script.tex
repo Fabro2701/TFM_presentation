@@ -1,0 +1,254 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\definecolor{accentblue}{HTML}{1F4E79}
+\definecolor{alertred}{HTML}{C0392B}
+
+\hypersetup{colorlinks=true, linkcolor=accentblue, urlcolor=accentblue}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{accentblue}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.8em}
+\newcommand{\seccionrule}{\vspace{-0.6em}{\color{accentblue}\hrule height 0.8pt}\vspace{0.8em}}
+
+\newcommand{\diapo}[2]{%
+  \par\medskip\noindent%
+  \textbf{\textcolor{accentblue}{#1.}}\enspace #2\par\smallskip}
+
+\setlength{\parindent}{0pt}
+
+\title{\textbf{Guion de la defensa}\\[4pt]
+  \large Statistical Properties of the Sharpe Ratio Estimator}
+\author{Fabrizio Ortega Suni}
+\date{Mayo de 2026}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries\textcolor{accentblue}{Guion de la defensa}}\\[6pt]
+  {\large Statistical Properties of the Sharpe Ratio Estimator}\\[2pt]
+  {\normalsize Fabrizio Ortega Suni \quad--\quad Mayo de 2026}
+\end{center}
+
+\vspace{0.6em}
+\seccionrule
+
+% =====================================================================
+\section*{How much can you trust a Sharpe ratio?}
+% =====================================================================
+
+\diapo{1}{Buenos días.
+Empecemos con un escenario muy simple: supongamos que nos dicen que el
+ratio de Sharpe de una estrategia de inversión es de 0.5. La pregunta que
+quiero que tengamos en mente los próximos veinte minutos es: ¿qué tan
+fiable es este número? Por supuesto, el ratio de Sharpe en sí mismo se
+define como el ratio de dos momentos poblacionales, pero en la práctica
+se tiene que estimar a partir de una muestra finita, de ahí que haya incertidumbre
+alrededor de la estimación.}
+
+\diapo{2}{
+El teorema central del límite nos dice que el error de estimación
+escalado converge a una normal con cierta varianza. El primer trabajo en
+tratar esto rigurosamente es el de Lo (2002), quien obtiene esta varianza
+bajo el supuesto de que los rendimientos son IID normales.
+Notemos que, una vez tenemos esta varianza asintótica, podemos construir
+un intervalo de confianza asintótico alrededor del verdadero SR. Con esto
+podemos reportar, con cierto nivel de confianza, dónde se encuentra el
+verdadero SR, lo cual es más robusto que solo la estimación puntual.}
+
+\diapo{3}{El problema viene de que la fórmula de Lo depende fuertemente
+de la normalidad asumida. Como sabemos de sobra, los retornos financieros
+poseen atributos que los alejan de este supuesto, entre ellos colas
+pesadas, asimetría, clusters de volatilidad y autocorrelación. Más
+adelante veremos cómo se comportan los intervalos y, más generalmente, la
+inferencia, cuando tenemos en cuenta o cuando obviamos estos atributos.}
+
+\diapo{4}{Distintos autores han extendido el trabajo de Lo; en esta tabla
+muestro los principales. Cada uno de ellos ha asumido un modelo distinto
+para los rendimientos y ha obtenido la fórmula de la varianza asintótica
+correspondiente. Podemos relacionar cada avance con lo que conté antes:
+Mertens incorpora las colas pesadas y la asimetría, y los siguientes, la
+autocorrelación y los clusters de volatilidad.
+Notemos, sin embargo, que hace falta un resultado para cuando hay
+autocorrelación y volatilidad condicional simultáneamente.}
+
+\diapo{5}{Y esta es la principal contribución de este trabajo.
+Aquí podemos ver la expresión final; vemos que su presentación ha
+requerido múltiples variables auxiliares. Y, por supuesto, los resultados
+anteriores se recuperan como casos especiales de esta fórmula.}
+
+\diapo{6}{Volvemos a la diapositiva 4. Notemos que la fórmula IID no
+normal permite el siguiente análisis: mientras más grande el SR real, o
+más grande la kurtosis, y más negativa la asimetría de los retornos,
+mayor será la varianza del estimador (en comparación con la IID normal). Un análisis similar se podría hacer
+para el parámetro de autocorrelación phi en el modelo AR(1); sin embargo,
+para los demás resulta más difícil, ya que hay interacciones más
+complejas entre los parámetros.
+Por esto, el trabajo contempla dos análisis de sensibilidad: uno en el
+que tomamos un punto base y numéricamente vemos cómo se comporta la
+varianza si variamos los demás parámetros, y otro análisis independiente
+de un punto base.
+Las conclusiones son que los parámetros SR, phi, kurtosis y asimetría
+presentan influencias claras, mientras que la influencia de alpha y beta
+es conjunta.}
+
+\vspace{0.4em}
+\seccionrule
+
+% =====================================================================
+\section*{Do the confidence intervals actually work?}
+% =====================================================================
+
+\diapo{7--8}{Volviendo a los intervalos, recordemos que, con las
+fórmulas anteriores, obtenemos intervalos asintóticos. El trabajo
+contiene varios experimentos acerca de qué pasa con estos cuando nos
+equivocamos especificando un modelo para los retornos, o cuando,
+haciéndolo correctamente, los intervalos no se comportan de buena
+manera.
+Los experimentos se basan en el concepto de cobertura. Por ejemplo, si
+calculamos un intervalo al 95\% de confianza teórico y simulamos 1000
+trayectorias Monte Carlo, y contamos cuántas han caído dentro del
+intervalo, este número debe ser cercano a 950, o sea, el 95\%.
+Ahora veremos unos resultados interesantes. En el primero se generan
+sintéticamente procesos AR(1) y se asume, también correctamente, un
+modelo AR(1); calculamos la cobertura para distintos valores de
+autocorrelación y vemos cómo evolucionan a medida que el tamaño de la
+trayectoria crece. Todos convergen al valor esperado, pero vemos que,
+cuando la autocorrelación es positiva, para series cortas hay
+infracobertura, es decir, nuestro intervalo, dado por la fórmula, se
+queda corto: es muy estrecho.
+El segundo experimento utiliza series sintéticas de un proceso
+AR(1)-GARCH(1,1) y evaluamos nuevamente las coberturas para distintos
+tamaños de trayectoria, pero esta vez cada linea representa un distinto modelo asumido. Vemos
+que solo uno de los modelos, el AR(1)-GARCH(1,1), converge al valor
+esperado; esto quiere decir que cualquier otro modelo —los de expresiones
+más simples— infraestima la varianza. Este es un ejemplo de por qué la
+fórmula que encontré es necesaria.}
+
+\diapo{9}{Estos son otros dos experimentos. El primero muestra el
+escenario de una especificación correcta (GARCH), pero para distintos
+niveles de los parámetros alpha+beta. Vemos que, mientras nos acercamos
+al punto de no estacionariedad alpha+beta=1, la varianza es sobreestimada
+cada vez más, llegando al punto de requerir trayectorias larguísimas para
+converger. En la práctica, esto se traduce en que, si sospechamos niveles
+altos de persistencia, sabemos que la fórmula de la varianza, aunque
+asintóticamente correcta, no es útil.
+El segundo nos lleva a otro extremo, esta vez para un proceso IID pero
+con innovaciones t de Student; lo que variamos aquí son los grados de
+libertad. Vemos que, mientras más pequeños, peor es la convergencia,
+llegando al punto de que, para df=3, hay divergencia. Esto es porque,
+como se explicó en el trabajo, una de las condiciones de regularidad
+necesarias es la existencia del momento de orden cuarto para los
+rendimientos, que en este caso no existiría.}
+
+\vspace{0.4em}
+\seccionrule
+
+% =====================================================================
+\section*{Is the point estimate even right?}
+% =====================================================================
+
+\diapo{10}{Dejando de lado los intervalos y volviendo a la estimación
+puntual, otra característica del SR sobre la que nos ocupamos es que, en
+muestras finitas, es sesgado. Para ello, encontramos las expresiones del
+sesgo y su correspondiente corrección para los modelos GARCH y AR-GARCH,
+como vemos en la tabla.}
+
+\diapo{11}{Aquí vemos estas correcciones aplicadas a distintos modelos y
+vemos cómo aceleran la convergencia (de la estimación puntual). El experimento es muy sencillo, generamos una serie sintética cuyo SR teórico es 0.5 y estimamos puntualmente SR con y sin corrección de sesgo, hacemos esto varias veces y tomamos la media.}
+
+\vspace{0.4em}
+\seccionrule
+
+% =====================================================================
+\section*{Does the framework survive real data?}
+% =====================================================================
+
+\diapo{12}{Hasta ahora solo hemos visto resultados teóricos o su
+aplicación a entornos simulados; ahora veremos cómo esto se aplicaría a
+un entorno real. Para ello, he tomado tres series semanales de ETF; las
+tres son significativas en autocorrelación y heterocedasticidad
+condicional, por lo que el modelo AR-GARCH parece un candidato apropiado.
+Aquí vemos un gráfico con sus precios y sus rendimientos.}
+
+\diapo{13}{Una vez elegido el modelo, se puede calcular el PSR, que no es
+más que uno menos el p-valor del test estadístico cuya hipótesis es
+averiguar si el SR es mayor que cierto umbral, en este caso 0.
+Intuitivamente, podemos verlo como la probabilidad de que el SR sea mayor
+que 0, algo deseable en una inversión.
+La tabla muestra el PSR para cada ETF, y las columnas muestran cómo
+cambiaría para cada modelo asumido (vemos que la expresión del PSR
+depende de la varianza asintótica, cuya fórmula, como vimos al inicio,
+cambia dependiendo del modelo asumido).
+Lo que quiero mostrar en esta tabla es que la decisión estadística de
+aceptar que un SR es positivo cambia dependiendo del modelo que
+asumamos. Recordemos que el modelo correcto —por lo menos, para mi
+criterio, es el AR-GARCH— pero, digamos que, por ejemplo, un analista
+asume un modelo GARCH: estadísticamente, al 5\%, rechazaríamos que
+SR$>$0, pero si asumiera el AR-GARCH, sí que aceptaría que SR$>$0.}
+
+\vspace{0.4em}
+\seccionrule
+
+% =====================================================================
+\section*{Beyond a single number: pairing with VaR}
+% =====================================================================
+
+\diapo{14}{Ahora veremos una de las secciones complementarias realizadas en el trabajo. Y es que una crítica posible al uso del ratio de Sharpe es que está
+basado en los dos primeros momentos; como alternativa, existen otras
+métricas, como el VaR. Imaginemos el escenario de dos inversiones con el mismo SR estimado, pero una de ellas tiene un VaR mayor, obviamente la que tiene menos VaR es más deseable, y viendo solo el SR estaríamos periendo esta información adicional. De aquí surge la idea de que en vez de sustituir este ratio, podemos
+trabajar con ambas de forma conjunta; para ello, en este trabajo,
+encontramos la distribución asintótica conjunta. Y, dentro de este marco,
+analizamos dos alternativas para el estimador del VaR: una completamente
+no paramétrica (cuantil empírico) y otra paramétrica (que usa la
+propiedad de traslación de los cuantiles).
+Lo que encontramos en la matriz de covarianzas asintótica de ambas
+opciones es que la covarianza entre ambos estimadores (el SR y el VaR) es
+común y negativa, lo que quiere decir que una sobreestimación del SR
+suele venir con una infraestimación del VaR. También vemos que el único
+término no común entre estas matrices es el de la varianza del VaR. La
+alternativa paramétrica es más precisa, y esta diferencia de precisión crece mientras
+más pequeño sea el percentil usado para el VaR. Esto nos lleva a pensar que usar el
+segundo estimador es más eficiente y que debería ser la elección por defecto, a continuación veremos que no es así.}
+
+\diapo{15}{Para poner a prueba las dos opciones, realizamos nuevamente
+experimentos de cobertura, solo que esta vez son dos variables, por lo
+que nuestros intervalos serán elipses.
+Tenemos dos escenarios: en el primero, los datos (generados) vienen de una normal, y
+en el segundo, de una t de Student. En el primero, nuestra identificación
+del modelo sería correcta, por lo que, efectivamente, vemos que la
+segunda alternativa es más eficiente, logrando una cobertura perfecta del
+95\%. En el segundo escenario, habríamos cometido un error de
+especificación, y vemos que la alternativa uno, el estimador no
+paramétrico, no cambia su cobertura, mientras que el paramétrico se
+vuelve sesgado y por lo tanto ya no es fiable.}
+
+\diapo{16}{Entonces, volvemos a nuestra pregunta inicial: ¿podemos
+confiar en el SR? La respuesta dependerá de los siguientes
+factores:
+\begin{enumerate}[label=\arabic*),leftmargin=1.6em,itemsep=2pt,topsep=4pt]
+  \item El modelo asumido: la estimación puntual no cambia, pero los
+    intervalos sí; y si nos equivocamos en el modelo, estos no serán
+    fiables.
+  \item Incluso si acertamos con el modelo, la naturaleza de los
+    rendimientos —como el signo de su autocorrelación, o si su cuarto
+    momento teórico existe— podría hacer que los intervalos tampoco
+    sean fiables.
+  \item En muestras pequeñas es sesgado, y debemos asegurarnos de que la
+    estimación puntual esté corregida.
+\end{enumerate}}
+
+\vspace{1.2em}
+\seccionrule
+
+
+\end{document}
